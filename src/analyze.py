@@ -155,6 +155,65 @@ def main() -> None:
         "absolute_coefficient", ascending=False
     ).to_csv(output_dir / "coefficients.csv", index=False)
 
+    # The presentation shows the five largest absolute standardized weights.
+    # Generate the same view from the fitted model so its plotted values and
+    # ordering can always be rebuilt from this script. Bars retain their sign:
+    # positive values push the fitted log-odds toward malignant, conditional
+    # on the other features in the model.
+    top_coefficients = coefficients.nlargest(5, "absolute_coefficient").sort_values(
+        "standardized_coefficient"
+    )
+    coefficient_colors = [
+        "#B85C5C" if value < 0 else "#245B78"
+        for value in top_coefficients["standardized_coefficient"]
+    ]
+    fig, ax = plt.subplots(figsize=(8, 4.8))
+    ax.barh(
+        top_coefficients["feature"],
+        top_coefficients["standardized_coefficient"],
+        color=coefficient_colors,
+    )
+    ax.axvline(0, color="#555555", linewidth=1)
+    ax.set(
+        xlabel="Standardized logistic-regression coefficient",
+        title="Five largest absolute coefficients",
+    )
+    ax.grid(axis="x", alpha=0.2)
+    fig.tight_layout()
+    fig.savefig(output_dir / "coefficients_top5.png", dpi=180)
+    plt.close(fig)
+
+    # The presentation's threshold exercise reuses these held-out probabilities
+    # without refitting. Save the reference counts and metrics so learners can
+    # check their own calculations after attempting the exercise.
+    threshold_rows = []
+    for threshold in (0.25, DECISION_THRESHOLD, 0.75):
+        predicted_at_threshold = (malignant_probability >= threshold).astype(int)
+        threshold_tn, threshold_fp, threshold_fn, threshold_tp = confusion_matrix(
+            y_test, predicted_at_threshold, labels=[0, 1]
+        ).ravel()
+        threshold_rows.append(
+            {
+                "threshold": threshold,
+                "true_negatives": int(threshold_tn),
+                "false_positives": int(threshold_fp),
+                "false_negatives": int(threshold_fn),
+                "true_positives": int(threshold_tp),
+                "sensitivity_recall": float(
+                    threshold_tp / (threshold_tp + threshold_fn)
+                ),
+                "specificity": float(
+                    threshold_tn / (threshold_tn + threshold_fp)
+                ),
+                "accuracy": float(
+                    (threshold_tn + threshold_tp) / len(y_test)
+                ),
+            }
+        )
+    pd.DataFrame(threshold_rows).to_csv(
+        output_dir / "threshold_comparison.csv", index=False
+    )
+
     (output_dir / "metrics.json").write_text(
         json.dumps(metrics, indent=2) + "\n", encoding="utf-8"
     )
