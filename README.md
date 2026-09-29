@@ -21,7 +21,7 @@ After completing the tutorial, learners should be able to:
 
 ## Teaching deck
 
-The [18-slide presentation](presentation/breast_cancer_ml_tutorial.pptx) includes speaker notes, a short feature explanation, code walkthroughs for target encoding and the leakage-safe pipeline, an editable confusion matrix and ROC curve, a coefficient chart, and a threshold exercise with discussion prompts. The Python analysis generates the quantitative artifacts shown in the deck, including the top-five coefficient plot and threshold comparison used for the exercise.
+The [20-slide presentation](presentation/breast_cancer_ml_tutorial.pptx) includes a plain-language project introduction and results interpretation, speaker notes, a short feature explanation, optional code walkthroughs for labeling, a leakage-safe train/test pipeline, and evaluation, an editable confusion matrix and ROC curve, a coefficient chart, and a threshold exercise with discussion prompts. The Python analysis generates the quantitative artifacts shown in the deck, including the top-five coefficient plot and threshold comparison used for the exercise.
 
 ## Dataset
 
