@@ -19,6 +19,10 @@ After completing the tutorial, learners should be able to:
 5. interpret a confusion matrix, sensitivity, specificity, and ROC AUC;
 6. explain why benchmark performance does not establish clinical readiness.
 
+## Teaching deck
+
+The [18-slide presentation](presentation/breast_cancer_ml_tutorial.pptx) includes speaker notes, a short feature explanation, code walkthroughs for target encoding and the leakage-safe pipeline, an editable confusion matrix and ROC curve, a coefficient chart, and a threshold exercise with discussion prompts.
+
 ## Dataset
 
 The dataset contains 569 samples and 30 numeric measurements derived from digitized images of fine-needle aspirate samples. The classes are 212 malignant and 357 benign. Scikit-learn includes a copy, so the tutorial does not download patient-level files at run time. Read the dataset documentation and limitations before teaching it:
